@@ -1,4 +1,5 @@
-import cart from './assets/cart.svg'
+import cart from '../assets/cart.svg'
+
 const CartWidget =()=>{
     return(
         <div>
@@ -6,3 +7,4 @@ const CartWidget =()=>{
         </div>
     )
 }
+export default CartWidget
