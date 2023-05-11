@@ -1,0 +1,10 @@
+.CardItem{
+    border-radius: 5%;
+    border: 20px;
+    border-color: rgb(182, 51, 51);
+    background-color: aqua;
+
+}
+article{
+    border: 5px ;
+}
