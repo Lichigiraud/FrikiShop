@@ -43,3 +43,12 @@
 .CardItem{
   border-color: black;
 }
+.Option{
+  width: 60px;
+  background-color: brown;
+  border-radius: 10%;
+  border-color: black;
+  padding: 5px;
+  
+
+}

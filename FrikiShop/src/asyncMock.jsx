@@ -29,7 +29,26 @@ const products = [
         img: pcGamer,
         stock: 4,
         description: 'descripcion de la pc',
-    }
+    },
+    {
+        id: '4',
+        nombre: 'Notebook',
+        precio: 150000 ,
+        categoria: 'computadoras' ,
+        img: pcGamer,
+        stock: 7,
+        description: 'descripcion de la pc',
+    },
+    {
+        id: '5',
+        nombre: 'Auriculares',
+        precio: 25000 ,
+        categoria: 'accesorios' ,
+        img: pcGamer,
+        stock: 6,
+        description: 'descripcion del acc',
+    },
+
 ]
 export const getProducts = () => {
     return new Promise((resolve) => {
@@ -48,7 +67,7 @@ export const getProductById =(productId)=>{
 export const getProductsByCategory = (productCategory) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(products.find((prod) => prod.categoria === productCategory));
+            resolve(products.filter((prod) => prod.categoria === productCategory));
         }, 500);
     });
 }

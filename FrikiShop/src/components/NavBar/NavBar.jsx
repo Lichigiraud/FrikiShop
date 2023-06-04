@@ -8,9 +8,9 @@ const NavBar = () =>{
                 <h3>FrikiShop</h3>
             </Link>
             <div className="Categorias">
-                <NavLink to={`/category/Consola`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>PlayStation5</NavLink>
-                <NavLink to={`/category/Consola`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>Xbox Serie X </NavLink>
-                <NavLink to={`/category/Computadoras`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>Pc Gamer</NavLink>
+                <NavLink to={`/category/consolas`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>Consolas</NavLink>
+                <NavLink to={`/category/accesorios`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>Accesorios</NavLink>
+                <NavLink to={`/category/computadoras`} className={({isActive}) => isActive ? 'ActiveOption' : 'Option'}>Computadoras</NavLink>
             </div>
             <CartWidget/>
         </nav>
