@@ -25,40 +25,42 @@ const Checkout = () => {
         },
         items: cart,
         total: total,
-        date: Timestamp.fromDate(new Date()),
+        date: Timestamp.fromDate(newDate()),
         };
 
-        const batch = new writeBatch(db);
+        const batch = writeBatch(db);
         const outOfStock = [];
         const ids = cart.map((prod) => prod.id);
         const productsRef = collection(db, "products");
-        const productsAddedFromFirestore = await getDocs(
-        query(productsRef, where(documentId(), "in", ids))
-    );
+        const productsAddedFromFirestore = await getDocs(query(productsRef, where(documentId(), "in", ids)));
+        const{docs} = productsAddedFromFirestore
 
-    if (productsAddedFromFirestore.size !== cart.length) {
-        throw new Error("Algunos productos no fueron encontrados en la base de datos");
-    }
-
-    productsAddedFromFirestore.forEach((doc) => {
-        const product = doc.data();
-        const item = cart.find((prod) => prod.id === doc.id);
-
-        if (product.stock >= item.quantity) {
-        batch.update(doc.ref, { stock: product.stock - item.quantity });
-        } else {
-        outOfStock.push(item);
-        }
-    });
-
+        docs.forEach(doc =>{
+            const dataDoc = doc.data()
+            const stockDb = dataDoc.stock
+            const productAddedToCart = cart.find(prod => prod.id === doc.id);
+            const prodQuantity = productAddedToCart?.quantity
+            if(stockDb >= prodQuantity){
+                batch.update(doc.ref,{stock: stockDb - productQuantity})
+            } else {
+                outOfStock.push({ id: doc.id, ...dataDoc})
+            }
+        })
+    
         if (outOfStock.length === 0) {
-        const ordersRef = collection(db, "orders");
-        const newOrderRef = await addDoc(ordersRef, objOrder);
-        setOrderId(newOrderRef.id);
-        clearCart();
-    } else {
-        throw new Error("Los siguientes productos están agotados: " + outOfStock.map((item) => item.title).join(", "));
-    }
+            await batch.commit();
+
+            const orderRef = collection(db, "orders");
+            const orderAdded = await addDoc(orderRef, objOrder);
+
+            setOrderId(orderAdded.id);
+            clearCart();
+        } else {
+            throw new Error(
+                "Los siguientes productos estan agotados: " +
+                    outOfStock.map((item) => item.title).join(", ")
+            );
+        }
 
         await commitBatch(batch);
     } catch (error) {
@@ -66,16 +68,14 @@ const Checkout = () => {
     } finally {
         setLoading(false);
     }
-    };
+};
+if (loading) {
+    return <h1>Se esta generando su orden...</h1>;
+}
 
-    if (loading) {
-    return <h1>Se está generando su orden...</h1>;
-    }
-
-    if (orderId) {
+if (orderId) {
     return <h1>El id de su orden es: {orderId}</h1>;
     }
-
     return (
     <div>
         <h1>Checkout</h1>
